@@ -1,5 +1,6 @@
 package com.example.zy.zy_weather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.zy.zy_weather.gson.Forecast;
 import com.example.zy.zy_weather.gson.Weather;
+import com.example.zy.zy_weather.service.AutoUpdateService;
 import com.example.zy.zy_weather.util.HttpUtil;
 import com.example.zy.zy_weather.util.Utility;
 
@@ -158,7 +160,7 @@ public class WeathActivity extends AppCompatActivity {
      * 根据天气id请求城市天气信息。
      */
     public void requestWeather(final String weatherId) {
-        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
+        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=fccf9f20d28c41d499e5c8eee4c7e2ab";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
 
             @Override
@@ -174,6 +176,8 @@ public class WeathActivity extends AppCompatActivity {
                             editor.apply();
                             mWeatherId = weather.basic.weatherId;
                             showWeatherInfo(weather);
+                            Intent intent=new Intent(WeathActivity.this, AutoUpdateService.class);
+                            startService(intent);
                         } else {
                             Toast.makeText(WeathActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
                         }
@@ -229,13 +233,12 @@ public class WeathActivity extends AppCompatActivity {
         }
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
-        String sport = "运行建议：" + weather.suggestion.sport.info;
+        String sport = "运动建议：" + weather.suggestion.sport.info;
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
-//        Intent intent = new Intent(this, AutoUpdateService.class);
-//        startService(intent);
+
     }
 
 }
