@@ -6,10 +6,15 @@ package com.example.zy.zy_weather.gson;
  */
 
 public class AQI {
-    public AQICity aqiCity;
 
-    public class AQICity{
+    public AQICity city;
+
+    public class AQICity {
+
         public String aqi;
+
         public String pm25;
+
     }
+
 }

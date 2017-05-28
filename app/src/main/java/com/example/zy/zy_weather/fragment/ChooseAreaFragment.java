@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zy.zy_weather.MainActivity;
 import com.example.zy.zy_weather.R;
 import com.example.zy.zy_weather.WeathActivity;
 import com.example.zy.zy_weather.db.City;
@@ -115,10 +116,18 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 }else if (currentLevel==LEVEL_COUNTY){
                     String weatherId=countyList.get(position).getWeatherId();
-                    Intent intent=new Intent(getActivity(), WeathActivity.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (getActivity() instanceof MainActivity){
+                        Intent intent=new Intent(getActivity(), WeathActivity.class);
+                        intent.putExtra("weather_id",weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if (getActivity() instanceof WeathActivity){
+                        WeathActivity activity= (WeathActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefresh.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+                    }
+
                 }
             }
         });
